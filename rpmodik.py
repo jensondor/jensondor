@@ -330,7 +330,7 @@ class RPModa(loader.Module):
 		""" Добавление/удаление пользователей, разрешенным использовать ваши команды.\n .useraccept {id/reply} """
 		reply = await message.get_reply_message()
 		args = utils.get_args_raw(message)
-		userA = self.db.get('RPModa', 'useraccept')
+		userA = self.db.get('RPModa', 'useraccepta')
 		if not reply and not args:
 			await utils.answer(message, 'Нет ни реплая, ни аргрументов.')
 		elif args == '-l':
@@ -346,11 +346,11 @@ class RPModa(loader.Module):
 			args = int(args) if args.isdigit() else reply.sender_id
 			if args in userA:
 				userA.remove(args)
-				self.db.set('RPModa', 'useraccept', userA)
+				self.db.set('RPModa', 'useraccepta', userA)
 				await utils.answer(message, f'<b>Пользователю <code>{args}</code> был закрыт доступ.</b>')
 			else:
 				userA.append(args)
-				self.db.set('RPModa', 'useraccept', userA)
+				self.db.set('RPModa', 'useraccepta', userA)
 				await utils.answer(message, f'<b>Пользователю <code>{args}</code> был открыт доступ.</b>')
 		else:
 			await utils.answer(message, 'Что то не так..')
@@ -396,7 +396,7 @@ class RPModa(loader.Module):
 			emojies = self.db.get('RPModa', 'rpemoji')
 			ex = self.db.get("RPModa", "exlist")
 			nicks = self.db.get('RPModa', 'rpnicks')
-			users_accept = self.db.get('RPModa', 'useraccept')
+			users_accept = self.db.get('RPModa', 'useraccepta')
 			conf = self.db.get("RPModa", "rpconfigurate", conf_default)
 			
 			chat_rp = await message.client.get_entity(message.to_id)
