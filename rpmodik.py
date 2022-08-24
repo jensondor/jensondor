@@ -68,7 +68,7 @@ class RPModa(loader.Module):
 		if self.db.get("RPModa", "rpconfigurate", False):			# ДЛЯ разных версий модуля.
 			self.db.set("RPModa", "rpconfigurate", self.merge_dict(conf_default, self.db.get("RPModa", "rpconfigurate")))
 
-	async def dobrpacmd(self, message):
+	async def dobrpcmd(self, message):
 		"""Используй: .dobrp (команда) / (действие) / (эмодзи) чтобы добавить команду. Можно и без эмодзи."""
 		args = utils.get_args_raw(message)
 		dict_rp = self.db.get('RPModa', 'rpcomands')
@@ -124,7 +124,7 @@ class RPModa(loader.Module):
 		except:
 			await utils.answer(message, '<b>Вы не ввели разделитель /, либо вовсе ничего не ввели.</b>')
 
-	async def delrpacmd(self, message):
+	async def delrpcmd(self, message):
 		"""Используй: .delrp (команда) чтобы удалить команду.\n Используй: .delrp all чтобы удалить все команды."""
 		args = utils.get_args_raw(message)
 		dict_rp = self.db.get('RPModa', 'rpcomands')
@@ -176,7 +176,7 @@ class RPModa(loader.Module):
 		else:  	
 			await utils.answer(message, 'Что то не так.. ')
 
-	async def rplistacmd(self, message):
+	async def rplistcmd(self, message):
 		"""Используй: .rplist чтобы посмотреть список рп команд."""
 		com = self.db.get('RPModa', 'rpcomands')
 		emojies = self.db.get('RPModa', 'rpemoji')
@@ -224,12 +224,12 @@ class RPModa(loader.Module):
 			self.db.set('RPModa', 'rpnicks', nicks)
 			await utils.answer(message, f"Ник пользователя <b>{str(user.id)}</b> изменён на '<b>{args}</b>'")
 
-	async def rpbackacmd(self, message):
+	async def rpbackcmd(self, message):
 		"""Бекап рп команд.\n .rpback для просмотра аргументов. """
 		args = utils.get_args_raw(message).strip()
 		comands = self.db.get('RPModa', 'rpcomands')
 		emojies = self.db.get('RPModa', 'rpemoji')
-		file_name = 'RPModBackUp.pickle'
+		file_name = 'RPModaBackUp.pickle'
 		id = message.to_id
 		reply = await message.get_reply_message()
 		if not args:
@@ -260,7 +260,7 @@ class RPModa(loader.Module):
 			except Exception as e:
 				await utils.answer(message, f"<b>Ошибка:\n</b>{e}")
 			
-	async def rpblockacmd(self, message):
+	async def rpblockcmd(self, message):
 		"""Используй: .rpblock чтобы добавить/удалить исключение(использовать в нужном чате).\nИспользуй: .rpblock list чтобы просмотреть чаты в исключениях.\nИспользуй .rpblock (ид) чтобы удалить чат из исключений."""
 		args = utils.get_args_raw(message)
 		ex = self.db.get("RPModa", "exlist")
@@ -326,11 +326,11 @@ class RPModa(loader.Module):
 		else:
 			await utils.answer(message, 'Что то пошло не так..')
 
-	async def useracceptacmd(self, message):
+	async def useracceptcmd(self, message):
 		""" Добавление/удаление пользователей, разрешенным использовать ваши команды.\n .useraccept {id/reply} """
 		reply = await message.get_reply_message()
 		args = utils.get_args_raw(message)
-		userA = self.db.get('RPModa', 'useraccepta')
+		userA = self.db.get('RPModa', 'useraccept')
 		if not reply and not args:
 			await utils.answer(message, 'Нет ни реплая, ни аргрументов.')
 		elif args == '-l':
@@ -346,16 +346,16 @@ class RPModa(loader.Module):
 			args = int(args) if args.isdigit() else reply.sender_id
 			if args in userA:
 				userA.remove(args)
-				self.db.set('RPModa', 'useraccepta', userA)
+				self.db.set('RPModa', 'useraccept', userA)
 				await utils.answer(message, f'<b>Пользователю <code>{args}</code> был закрыт доступ.</b>')
 			else:
 				userA.append(args)
-				self.db.set('RPModa', 'useraccepta', userA)
+				self.db.set('RPModa', 'useraccept', userA)
 				await utils.answer(message, f'<b>Пользователю <code>{args}</code> был открыт доступ.</b>')
 		else:
 			await utils.answer(message, 'Что то не так..')
 
-	async def rpconfacmd(self, message):
+	async def rpconfcmd(self, message):
 		"""Настройка шаблона для рп"""
 		conf = self.db.get("RPModa", "rpconfigurate", conf_default)
 		args = utils.get_args_raw(message)
@@ -396,7 +396,7 @@ class RPModa(loader.Module):
 			emojies = self.db.get('RPModa', 'rpemoji')
 			ex = self.db.get("RPModa", "exlist")
 			nicks = self.db.get('RPModa', 'rpnicks')
-			users_accept = self.db.get('RPModa', 'useraccepta')
+			users_accept = self.db.get('RPModa', 'useraccept')
 			conf = self.db.get("RPModa", "rpconfigurate", conf_default)
 			
 			chat_rp = await message.client.get_entity(message.to_id)
@@ -437,7 +437,7 @@ class RPModa(loader.Module):
 	
 			rpMessageSend = ''
 			if detail[0] in emojies.keys(): rpMessageSend += emojies[detail[0]] + ' | '
-			rpMessageSend += f"{s1[0]}{comand[detail[0]]}{s1[1]} {detail[1]}"
+			rpMessageSend += f"<a href=tg://user?id={me.id}>{nick}</a> {s1[0]}{comand[detail[0]]}{s1[1]} <a href=tg://user?id={user.id}>{user.first_name}</a>{detail[1]}"
 			if len(lines) >= 2: rpMessageSend += "\n{0} {1[0]}С репликой:{1[1]} {2[0]}{3}{2[1]}".format(sE, s2, s3, sS.join(lines[1:]))
 			if rezjim == 1:
 				return await utils.answer(message, rpMessageSend)
