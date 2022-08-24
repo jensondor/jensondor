@@ -154,7 +154,7 @@ class RPModa(loader.Module):
 			except KeyError:
 				await utils.answer(message, '<b>Команда не найдена.</b>')
 
-	async def RPModaacmd(self, message):
+	async def RPModacmd(self, message):
 		"""Используй: .RPModa чтобы включить/выключить RP режим.\nИспользуй: .RPModa toggle чтобы сменить режим на отправку или изменение смс."""
 		status = self.db.get("RPModa", "status")
 		rezjim = self.db.get("RPModa", "rprezjim")
@@ -229,7 +229,7 @@ class RPModa(loader.Module):
 		args = utils.get_args_raw(message).strip()
 		comands = self.db.get('RPModa', 'rpcomands')
 		emojies = self.db.get('RPModa', 'rpemoji')
-		file_name = 'RPModaBackUp.pickle'
+		file_name = 'RPModBackUp.pickle'
 		id = message.to_id
 		reply = await message.get_reply_message()
 		if not args:
