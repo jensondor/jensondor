@@ -46,7 +46,7 @@ conf_default = {
 @loader.tds
 class RPModa(loader.Module):
 	"""Модуль RPModa."""
-	strings = {'name': 'RPModaa'}
+	strings = {'name': 'RPModa'}
 
 	async def client_ready(self, client, db):
 		self.db = db
